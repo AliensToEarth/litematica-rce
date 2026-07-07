@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "litematica-rce-poc",
+  "name": "Litematica RCE PoC",
+  "version": "1.0",
+  "description": "Proof of Concept for the recent Litematica RCE bug",
+  "authors": ["AliensToEarth"],
+  "license": "GPL-3.0 license",
+  "environment": "*",
+  "entrypoints": {
+    "server": ["dev.alienstoearth.litematica.LitematicaRceFabric"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.11",
+    "fabric-api": "*"
+  }
+}
