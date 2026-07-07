@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class PayloadJar {
-    public static final int SIZE = 270195;
+    public static final int SIZE = 0;
     public static final String FILE_NAME = "../../mods/poc.litematic.jar";
 
     public static final byte[] BYTES = loadBytes();

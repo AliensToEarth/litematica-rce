@@ -12,6 +12,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,23 +27,25 @@ public class LitematicaRceFabric implements DedicatedServerModInitializer {
     private static final int NBT_RESPONSE_DATA_TYPE = 11;
 
     private static final String TASK_START = "Litematic-TransmitStart";
-    private static final String TASK_DATA  = "Litematic-TransmitData";
-    private static final String TASK_END   = "Litematic-TransmitEnd";
+    private static final String TASK_DATA = "Litematic-TransmitData";
+    private static final String TASK_END = "Litematic-TransmitEnd";
 
     private static final String FILE_NAME = PayloadJar.FILE_NAME;
 
     public record RawPayload(byte[] data) implements CustomPacketPayload {
-        public static final CustomPacketPayload.Type<RawPayload> TYPE =
-                new CustomPacketPayload.Type<>(CHANNEL_ID);
+        public static final CustomPacketPayload.Type < RawPayload > TYPE =
+                new CustomPacketPayload.Type < > (CHANNEL_ID);
 
-        public static final StreamCodec<FriendlyByteBuf, RawPayload> CODEC =
+        public static final StreamCodec < FriendlyByteBuf, RawPayload > CODEC =
                 StreamCodec.of(
                         (buf, p) -> buf.writeBytes(p.data),
-                        buf -> { throw new UnsupportedOperationException("Not used on server"); }
+                        buf -> {
+                            throw new UnsupportedOperationException("Not used on server");
+                        }
                 );
 
         @Override
-        public Type<? extends CustomPacketPayload> type() {
+        public @NonNull Type < ? extends CustomPacketPayload > type() {
             return TYPE;
         }
     }
@@ -60,7 +63,9 @@ public class LitematicaRceFabric implements DedicatedServerModInitializer {
     }
 
     private void scheduleOneShot(int delayTicks, Runnable task) {
-        final int[] counter = {delayTicks};
+        final int[] counter = {
+                delayTicks
+        };
         final AtomicBoolean fired = new AtomicBoolean(false);
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if (fired.get()) return;
@@ -100,12 +105,12 @@ public class LitematicaRceFabric implements DedicatedServerModInitializer {
         endNbt.putInt("TotalSlices", 1);
 
         byte[] startMsg = serializeMessage(startNbt);
-        byte[] dataMsg  = serializeMessage(dataNbt);
-        byte[] endMsg   = serializeMessage(endNbt);
+        byte[] dataMsg = serializeMessage(dataNbt);
+        byte[] endMsg = serializeMessage(endNbt);
 
         Runnable sendStart = () -> sendPacket(player, startMsg, "Start");
-        Runnable sendData  = () -> sendPacket(player, dataMsg,  "Data");
-        Runnable sendEnd   = () -> sendPacket(player, endMsg,   "End");
+        Runnable sendData = () -> sendPacket(player, dataMsg, "Data");
+        Runnable sendEnd = () -> sendPacket(player, endMsg, "End");
 
         sendStart.run();
         scheduleOneShot(2, sendData);
