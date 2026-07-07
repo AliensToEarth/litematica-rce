@@ -7,7 +7,7 @@ Information about this vulnerability has already spread widely across the
 Minecraft modding community. Litematica has released a patch. I'm publishing
 this PoC so the community can study the mechanism and understand how it works.
 
-Proof of concept exploiting a directory traversal vulnerability in Litematica's
+This Proof of concept is exploiting a directory traversal vulnerability in Litematica's
 schematic file transmission protocol.
 
 ## The Vulnerability
@@ -23,7 +23,7 @@ filename like `../../mods/evil.litematic.jar`, the path resolves outside the
 written as-is (not validated as a real schematic), any arbitrary JAR file can be
 deployed and loaded as a Fabric mod on the next client restart.
 
-Litematica has already posted patches in version 0.26.11+ for Minecraft 1.21.x.
+Litematica has already posted patches in version 0.26.11 for Minecraft 1.21.x.
 Clients running patched versions are not vulnerable. I found the message about
 the existence of this vulnerability in the DupersUnited Discord server and
 started digging into Litematica's source code, comparing the patched version
@@ -62,7 +62,7 @@ between them to ensure the client processes them sequentially.
    ```
    ./gradlew build
    ```
-   Deploy `build/libs/litematica-rce-poc.jar` to your server's `mods/` folder.
+   Deploy `build/libs/litematica-rce.jar` to your server's `mods/` folder.
 
 2. Or, embed your own payload:
    ```
