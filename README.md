@@ -12,7 +12,7 @@ schematic file transmission protocol.
 
 ## The Vulnerability
 
-Litematica (versions prior to 0.26.11) has a schematic sharing feature that
+Litematica has a schematic sharing feature that
 uses a custom network protocol via the `servux:litematics` channel. The protocol
 allows a server to send schematic files to clients. The schematic is written to
 `schematics/transmit/<filename>` on the client filesystem.
@@ -49,22 +49,16 @@ between them to ensure the client processes them sequentially.
 
 ## Files
 
-| File | Purpose |
-|------|---------|
+| File                                         | Purpose                                        |
+|----------------------------------------------|------------------------------------------------|
 | `src/main/java/.../LitematicaRceFabric.java` | Server-side mod that sends the crafted packets |
-| `src/main/java/.../PayloadJar.java` | Loads the payload JAR from bundled resource |
-| `src/main/resources/payload.jar` | The actual payload JAR embedded in the mod |
-| `embed_payload.sh` | Script to replace the payload with any JAR |
+| `src/main/java/.../PayloadJar.java`          | Loads the payload JAR from bundled resource    |
+| `src/main/resources/payload.jar`             | The actual payload JAR embedded in the mod     |
+| `embed_payload.sh`                           | Script to replace the payload with any JAR     |
 
 ## Usage
 
-1. Build the default mod (includes baked-in example payload):
-   ```
-   ./gradlew build
-   ```
-   Deploy `build/libs/litematica-rce.jar` to your server's `mods/` folder.
-
-2. Or, embed your own payload:
+1. Embed your jar and build:
    ```
    ./embed_payload.sh path/to/your-mod.jar [output-name]
    ./gradlew build
@@ -73,7 +67,7 @@ between them to ensure the client processes them sequentially.
    referencing it. The `output-name` becomes the filename written to the
    victim's `mods/` folder (defaults to `poc.litematic.jar`).
 
-3. Start the server, have a client (running Litematica < 0.26.11) connect.
+2. Start the Minecraft Fabric 1.21.11 server, have a client (running Litematica < 0.26.11) connect.
    The server waits 3 seconds after login, then sends the three packets.
    The client writes the file and logs a schematic read error (expected -
    the file is not a real schematic). The payload JAR sits in `mods/` and is
